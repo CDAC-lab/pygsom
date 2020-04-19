@@ -1,10 +1,9 @@
 import numpy as np
 import pandas as pd
-from sklearn.metrics import pairwise_distances
+from scipy.spatial import distance
 import scipy
 from tqdm import tqdm
 import math
-from visualize import show_gsom
 
 data_filename = "data/zoo.txt".replace('\\', '/')
 
@@ -221,7 +220,8 @@ class GSOM:
         rightx, righty = x + 1, y
         topx, topy = x, y + 1
         bottomx, bottomy = x, y - 1
-        self.node_errors[self.map[(x, y)]] = self.groth_threshold / 2 #TODO check this value if different in Rashmika's version
+        self.node_errors[self.map[(x, y)]] = self.groth_threshold   #TODO check this value if different in Rashmika's
+                                                                    # version and paper version (paper t/2 Rashmika t)
         self.node_errors[self.map[(leftx, lefty)]] *= (1 + self.FD)
         self.node_errors[self.map[(rightx, righty)]] *= (1 + self.FD)
         self.node_errors[self.map[(topx, topy)]] *= (1 + self.FD)
@@ -340,13 +340,13 @@ class GSOM:
         grp_output =data_out.groupby("output")
         dn = grp_output[index_col].apply(list).reset_index()
         dn[label_col] = grp_output[label_col].apply(list)
-        dn["hit_count"] = df[index_col].apply(lambda x: len(x))
+        dn["hit_count"] = dn[index_col].apply(lambda x: len(x))
         dn["x"] = dn["output"].apply(lambda x: self.node_coordinate[x, 0])
         dn["y"] = dn["output"].apply(lambda x: self.node_coordinate[x, 1])
         hit_max_count = dn["hit_count"].max()
-        self.node_labels=dn
+        self.node_labels = dn
         # display map
-        show_gsom(self.node_labels, hit_max_count,index_col,label_col)
+        #plot(self.node_labels, index_col)
 
         return self.node_labels
 
