@@ -16,5 +16,12 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3",
     ],
+    install_requires=[
+            'numpy>=1.17.4',
+            'pandas>=0.25.3',
+            'scipy>=1.4.1',
+            'tqdm>=4.39.0',
+            'matplotlib>=3.1.2',
+    ],
     python_requires='>=3.6',
 )
