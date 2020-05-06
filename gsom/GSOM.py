@@ -5,7 +5,7 @@ import scipy
 from tqdm import tqdm
 import math
 
-data_filename = "data/zoo.txt".replace('\\', '/')
+data_filename = "example/data/zoo.txt".replace('\\', '/')
 
 
 class GSOM:
@@ -47,6 +47,7 @@ class GSOM:
         self.max_radius = max_radius
         self.initialize_GSOM()
         self.node_labels = None  # Keep the prediction GSOM nodes
+        self.output = None # keep the cluster id of each data point
         # HTM sequence learning parameters
         self.predictive = None  # Keep the prediction of the next sequence value (HTM predictive state)
         self.active = None  # Keep the activation of the current sequence value (HTM active state)
@@ -347,6 +348,7 @@ class GSOM:
         self.node_labels = dn
         # display map
         #plot(self.node_labels, index_col)
+        self.output = data_out
 
         return self.node_labels
 
@@ -359,5 +361,6 @@ if __name__ == '__main__':
     gsom = GSOM(.83, 16, max_radius=4)
     gsom.fit(data_training.to_numpy(), 100, 50)
     gsom.predict(df,"Name","label")
+    gsom.output.to_csv("output.csv")
 
     print("complete")
