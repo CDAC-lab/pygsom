@@ -15,7 +15,7 @@
 To pip install `pygsom` from github:
 
 ```bash
-pip install git+https://thimalk@bitbucket.org/thimalk/pygsom.git
+pip install git+https://github.com/CDAC-lab/pygsom.git
 ```
 
 
