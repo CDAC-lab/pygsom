@@ -1,6 +1,6 @@
 # `pygsom` - python GSOM algorithm
 
-`pygsom` is an **open source** python-based impleentation of **GSOM** algorithm. GSOM is unsupervised  dimensinality reduction and clustering  algorithm 
+`pygsom` is an **open source** python-based implementation of **GSOM** algorithm. GSOM is unsupervised  dimensionality reduction and clustering  algorithm 
 
 
 ## Table of Contents
