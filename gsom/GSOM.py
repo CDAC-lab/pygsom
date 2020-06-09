@@ -317,7 +317,7 @@ class GSOM:
 
             self.smooth(data, radius_exp, current_learning_rate)
 
-    def predict(self, data, index_col, label_col):
+    def predict(self, data, index_col, label_col=None):
         """
         Identify the winner nodes for test dataset
         Predict the winning node for each data point and create a pandas dataframe
@@ -330,17 +330,22 @@ class GSOM:
 
         # Prepare the dataset - remove label and index column
         weight_columns = list(data.columns.values)
-        weight_columns.remove(label_col)
+        output_columns = [index_col]
+        if label_col:
+            weight_columns.remove(label_col)
+            output_columns.append(label_col)
+
         weight_columns.remove(index_col)
         data_n = data[weight_columns].to_numpy()
-        data_out = pd.DataFrame(data[[label_col,index_col]])
+        data_out = pd.DataFrame(data[output_columns])
         # Identify winners
         out = scipy.spatial.distance.cdist(self.node_list[:self.node_count], data_n, self.distance)
-        data_out["output"] =out.argmin(axis=0)
+        data_out["output"] = out.argmin(axis=0)
 
         grp_output =data_out.groupby("output")
         dn = grp_output[index_col].apply(list).reset_index()
-        dn[label_col] = grp_output[label_col].apply(list)
+        if label_col:
+            dn[label_col] = grp_output[label_col].apply(list)
         dn["hit_count"] = dn[index_col].apply(lambda x: len(x))
         dn["x"] = dn["output"].apply(lambda x: self.node_coordinate[x, 0])
         dn["y"] = dn["output"].apply(lambda x: self.node_coordinate[x, 1])

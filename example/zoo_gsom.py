@@ -12,7 +12,8 @@ if __name__ == '__main__':
     data_training = df.iloc[:, 1:17]
     gsom_map = gsom.GSOM(.83, 16, max_radius=4)
     gsom_map.fit(data_training.to_numpy(), 100, 50)
-    map_points = gsom_map.predict(df,"Name","label")
+    df = df.drop(columns=["label"])
+    map_points = gsom_map.predict(df,"Name")
     gsom.plot(map_points, "Name")
 
 
