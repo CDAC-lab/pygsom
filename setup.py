@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pygsom",
-    version="0.0.1",
+    version="0.0.2",
     author="Thimal Kempitiya",
     author_email="t.kempitiya@gmail.com",
     description="gsom clustering and dimensional reduction algorithm",
