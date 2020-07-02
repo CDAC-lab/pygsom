@@ -344,8 +344,10 @@ class GSOM:
 
         grp_output =data_out.groupby("output")
         dn = grp_output[index_col].apply(list).reset_index()
+        dn = dn.set_index("output")
         if label_col:
             dn[label_col] = grp_output[label_col].apply(list)
+        dn = dn.reset_index()
         dn["hit_count"] = dn[index_col].apply(lambda x: len(x))
         dn["x"] = dn["output"].apply(lambda x: self.node_coordinate[x, 0])
         dn["y"] = dn["output"].apply(lambda x: self.node_coordinate[x, 1])
