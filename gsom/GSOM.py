@@ -316,6 +316,9 @@ class GSOM:
                 current_learning_rate = self._get_learning_rate(current_learning_rate)
 
             self.smooth(data, radius_exp, current_learning_rate)
+        # Identify winners
+        out = scipy.spatial.distance.cdist(self.node_list[:self.node_count], data, self.distance)
+        return out.argmin(axis=0)
 
     def predict(self, data, index_col, label_col=None):
         """

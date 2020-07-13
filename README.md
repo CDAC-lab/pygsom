@@ -8,7 +8,7 @@
 * [Installation](#installation)
 * [Minimal example](#minimal-example)
 * [Getting started](#getting-started)
-* [Citing pke](#citing-pke)
+* [Citing gsom](#citing pygsom)
 
 ## Installation
 
