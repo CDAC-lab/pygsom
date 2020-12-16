@@ -4,7 +4,7 @@ from matplotlib import cm
 from matplotlib import colors
 
 
-def plot(output, index_col, file_name="gsom", figure_label="GSOM Map", max_text=3, max_length=30, cmap_colors="Paired"):
+def plot(output, index_col, file_name="gsom", figure_label="GSOM Map", max_text=3, max_length=30, cmap_colors="Paired", show_index=True):
     """
     plot GSOM nodes with their clustered data points upto max_text labels
     :param output:
@@ -13,6 +13,7 @@ def plot(output, index_col, file_name="gsom", figure_label="GSOM Map", max_text=
     :param max_text:
     :param max_length:
     :param cmap_colors:
+    :param show_index:
     :return:
     """
 
@@ -22,14 +23,14 @@ def plot(output, index_col, file_name="gsom", figure_label="GSOM Map", max_text=
     for index, i in output.iterrows():
         x = i['x']
         y = i['y']
-        if i['hit_count']>0:
-            label = ", ".join(map(str,i[index_col][0:max_text]))
-
-        else:
-            label = ""
         ax.plot(x, y, 'o', color=listed_color_map.colors[i['hit_count']], markersize=2)
-        txt = ax.text(x, y,label, ha='left', va='center', wrap=True, fontsize=4)
-        txt._get_wrap_line_width = lambda: max_length  # wrap to n screen pixels
+        if show_index:
+	        if i['hit_count']>0:
+	            label = ", ".join(map(str,i[index_col][0:max_text]))
+	        else:
+	            label = ""
+	        txt = ax.text(x, y,label, ha='left', va='center', wrap=True, fontsize=4)
+	        txt._get_wrap_line_width = lambda: max_length  # wrap to n screen pixels
 
     ax.set_title(figure_label)
     plt.savefig(file_name+".png", dpi=1200)
