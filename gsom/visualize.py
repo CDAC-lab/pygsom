@@ -4,7 +4,7 @@ from matplotlib import cm
 from matplotlib import colors
 
 
-def plot(output, index_col, file_name="gsom", figure_label="GSOM Map", max_text=3, max_length=30, cmap_colors="Paired", show_index=True):
+def plot(output, index_col,gsom_map = None, file_name="gsom", file_type = ".pdf", figure_label="GSOM Map", max_text=3, max_length=30, cmap_colors="Paired", show_index=True):
     """
     plot GSOM nodes with their clustered data points upto max_text labels
     :param output:
@@ -20,6 +20,9 @@ def plot(output, index_col, file_name="gsom", figure_label="GSOM Map", max_text=
     max_count = output["hit_count"].max()
     listed_color_map = _get_color_map(max_count, alpha=0.9, cmap_colors=cmap_colors)
     fig, ax = plt.subplots()
+    if gsom_map:
+        ax.plot(gsom_map.node_coordinate[:180,0], gsom_map.node_coordinate[:180,1], 'o',
+                color=listed_color_map.colors[0], markersize=2)
     for index, i in output.iterrows():
         x = i['x']
         y = i['y']
@@ -33,7 +36,7 @@ def plot(output, index_col, file_name="gsom", figure_label="GSOM Map", max_text=
 	        txt._get_wrap_line_width = lambda: max_length  # wrap to n screen pixels
 
     ax.set_title(figure_label)
-    plt.savefig(file_name+".png", dpi=1200)
+    plt.savefig(file_name+file_type)
 
 
 def _get_color_map(max_count, alpha=0.5, cmap_colors="Reds"):

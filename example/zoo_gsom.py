@@ -14,7 +14,8 @@ if __name__ == '__main__':
     gsom_map.fit(data_training.to_numpy(), 100, 50)
     df = df.drop(columns=["label"])
     map_points = gsom_map.predict(df,"Name")
-    gsom.plot(map_points, "Name")
+    gsom.plot(map_points, "Name", gsom_map=gsom_map)
+    map_points.to_csv("gsom.csv", index=False)
 
 
 

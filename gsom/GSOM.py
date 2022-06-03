@@ -221,7 +221,7 @@ class GSOM:
         rightx, righty = x + 1, y
         topx, topy = x, y + 1
         bottomx, bottomy = x, y - 1
-        self.node_errors[self.map[(x, y)]] = self.groth_threshold   #TODO check this value if different in Rashmika's
+        self.node_errors[self.map[(x, y)]] = self.groth_threshold/2   #TODO check this value if different in Rashmika's
                                                                     # version and paper version (paper t/2 Rashmika t)
         self.node_errors[self.map[(leftx, lefty)]] *= (1 + self.FD)
         self.node_errors[self.map[(rightx, righty)]] *= (1 + self.FD)
@@ -245,7 +245,7 @@ class GSOM:
             self.grow_node(x, y, rightx, righty, 1)
             self.grow_node(x, y, topx, topy, 2)
             self.grow_node(x, y, bottomx, bottomy, 3)
-        # self.node_errors[rmu_index] = 0 #TODO check the need of setting the error to zero after weight adaptation
+        self.node_errors[rmu_index] = self.groth_threshold/2 #TODO check the need of setting the error to zero after weight adaptation
 
     def winner_identification_and_neighbourhood_update(self, data_index, data, radius, learning_rate):
         out = scipy.spatial.distance.cdist(self.node_list[:self.node_count], data[data_index, :].reshape(1, self.dimentions), self.distance)
@@ -370,7 +370,7 @@ if __name__ == '__main__':
     data_training = df.iloc[:, 1:17]
     gsom = GSOM(.83, 16, max_radius=4)
     gsom.fit(data_training.to_numpy(), 100, 50)
-    gsom.predict(df,"Name","label")
-    gsom.output.to_csv("output.csv")
+    output = gsom.predict(df,"Name","label")
+    output.to_csv("output.csv", index=False)
 
     print("complete")
