@@ -40,7 +40,8 @@ if __name__ == '__main__':
     gsom_map = gsom.GSOM(.83, 16, max_radius=4)
     gsom_map.fit(data_training.to_numpy(), 100, 50)
     map_points = gsom_map.predict(df,"Name","label")
-    gsom.plot(map_points, "Name")
+    gsom.plot(map_points, "Name", gsom_map=gsom_map)
+    map_points.to_csv("gsom.csv", index=False)
 ```
 
 ## Getting started
@@ -54,7 +55,7 @@ map_points = gsom_map.predict(df,<name column name>,<label column name>)
 ```
 Plot the 2D map: need to give the output of predict function with label column (name column or label column)
 ```python
-gsom.plot(map_points, <name column name/label column name>)
+gsom.plot(map_points, <name column name/label column name>, gsom_map=<gsom_map>)
 ```
 
 ## Citing pygsom
