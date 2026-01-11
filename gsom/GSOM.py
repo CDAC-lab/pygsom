@@ -216,7 +216,7 @@ class GSOM:
             weights[weights > 1] = 1.0
             self.insert_new_node(x, y, weights)
 
-    def spread_wights(self, x, y):
+    def _spread_error(self, x, y):
         leftx, lefty = x - 1, y
         rightx, righty = x + 1, y
         topx, topy = x, y + 1
@@ -228,7 +228,7 @@ class GSOM:
         self.node_errors[self.map[(topx, topy)]] *= (1 + self.FD)
         self.node_errors[self.map[(bottomx, bottomy)]] *= (1 + self.FD)
 
-    def adjust_wights(self, x, y, rmu_index):
+    def grow_and_error_distribute(self, x, y, rmu_index):
         leftx, lefty = x - 1, y
         rightx, righty = x + 1, y
         topx, topy = x, y + 1
@@ -238,14 +238,14 @@ class GSOM:
                 and (rightx, righty) in self.map \
                 and (topx, topy) in self.map \
                 and (bottomx, bottomy) in self.map:
-            self.spread_wights(x, y)
+            self._spread_error(x, y)
         else:
         # Grow new nodes for the four sides
             self.grow_node(x, y, leftx, lefty, 0)
             self.grow_node(x, y, rightx, righty, 1)
             self.grow_node(x, y, topx, topy, 2)
             self.grow_node(x, y, bottomx, bottomy, 3)
-        self.node_errors[rmu_index] = self.groth_threshold/2 #TODO check the need of setting the error to zero after weight adaptation
+            self.node_errors[rmu_index] = self.groth_threshold/2 #TODO check the need of setting the error to zero after weight adaptation
 
     def winner_identification_and_neighbourhood_update(self, data_index, data, radius, learning_rate):
         out = scipy.spatial.distance.cdist(self.node_list[:self.node_count], data[data_index, :].reshape(1, self.dimentions), self.distance)
@@ -290,7 +290,7 @@ class GSOM:
             # winner node weight update and grow
             self.node_errors[rmu_index] += error_val
             if self.node_errors[rmu_index] > self.groth_threshold:
-                self.adjust_wights(rmu_x, rmu_y, rmu_index)
+                self.grow_and_error_distribute(rmu_x, rmu_y, rmu_index)
 
     def fit(self, data, training_iterations, smooth_iterations):
         """
